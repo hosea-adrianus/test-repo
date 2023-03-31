@@ -10,6 +10,16 @@ public class EmailValidator implements Predicate<String> {
     @Override
     public boolean test(String email) {
         // TODO: Regex to validate email
-        return true;
+        String emailRegexPattern = "^[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+        if(patternMatches(email, emailRegexPattern)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean patternMatches(String emailAddress, String regexPattern) {
+        return Pattern.compile(regexPattern)
+                .matcher(emailAddress)
+                .matches();
     }
 }
