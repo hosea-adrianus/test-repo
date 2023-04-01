@@ -13,6 +13,8 @@ import serverapp.security.security111.repository.AppUserRepository;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @AllArgsConstructor
@@ -29,6 +31,10 @@ public class AppUserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
     }
     public String signUpUser(AppUser appUser){
+        String email = appUser.getEmail();
+        if (!isValidEmail(email)) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
         boolean userExist = appUserRepository
                 .findByEmail(appUser.getEmail())
                 .isPresent();
@@ -55,4 +61,11 @@ public class AppUserService implements UserDetailsService {
     public int enableAppUser(String email) {
         return appUserRepository.enableAppUser(email);
     }
+    public boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9]+(?:\\\\.[a-zA-Z0-9]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
 }
