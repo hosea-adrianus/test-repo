@@ -13,6 +13,7 @@ import serverapp.security.security111.service.RegistrationService;
 @AllArgsConstructor
 public class RegistrationController {
     private RegistrationService registrationService;
+    @PostMapping
     public String register(@RequestBody RegistrationRequest request){
         return registrationService.register(request);
     }
